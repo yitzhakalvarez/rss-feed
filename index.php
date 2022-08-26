@@ -16,25 +16,52 @@
         <p>
             Get your real-time content updates from the web with this RSS feed reader.
         </p>
-        <form action="index.php" method="post">
-            <label for="url">URL:</label>
-            <input type="text" name="url" id="url" placeholder="Enter URL">
-            <input type="submit" value="Submit">
+    </div>
+    <main class="container ">
+        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <input type="url" name="url" placeholder="Your favorite RSS url" autofocus>
+            <input type="submit" class="contrast" value="Feed">
         </form>
         <?php
-        if (isset($_POST['url'])) {
-            $url = $_POST['url'];
-            $xml = simplexml_load_file($url);
-            echo "<h2>" . $xml->channel->title . "</h2>";
-            echo "<p>" . $xml->channel->description . "</p>";
-            echo "<ul>";
-            foreach ($xml->channel->item as $item) {
-                echo "<li><a href='" . $item->link . "'>" . $item->title . "</a></li>";
-            }
-            echo "</ul>";
+        function isXML(string $url)
+        {
+            /* Explicitly return if url is valid XML */
+            libxml_use_internal_errors(true);
+            $Isxml = simplexml_load_file($url, "SimpleXMLElement", LIBXML_NOCDATA);
+            return $Isxml;
+        }
+
+        if (isset($_POST["url"])) {
+            $url = $_POST["url"];
+            $xml = isXML($url);
         }
         ?>
-    </div>
+        <?php if ($xml) :
+            $imageUrl = $xml->channel->image->url;
+            require_once("./articles.php");
+            foreach ($xml->channel->item as $item) {
+                $articles = new articles($item, $imageUrl);
+                $articles->display();
+            }
+        ?>
+        <?php elseif (isset($_POST["url"])) : ?>
+            <article>
+                <p>This URL is not a valid RSS feed.😥 </p>
+                <a href="https://rss.com/blog/popular-rss-feeds/" target="_blank" rel="noopener noreferrer">
+                    Link to popular RSS Feed.
+                </a>
+                <br> <br>
+                <i>
+                    <a href="https://rss.com/blog/how-do-rss-feeds-work/" target="_blank" rel="noopener noreferrer">
+                        What's a RSS Feed ?
+                    </a> </i>
+            </article>
+        <?php else : ?>
+
+        <?php endif ?>
+
+
+    </main>
 </body>
 
 </html>

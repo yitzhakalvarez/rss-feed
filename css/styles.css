@@ -18,6 +18,7 @@ h1, p
     font-size: 3rem;
     color: #fff;
     text-shadow: 2px 2px #000;
+    padding-top: 15%;
 }
 
 .hero p
@@ -25,5 +26,30 @@ h1, p
     font-size: 1.5rem;
     color: #fff;
     text-shadow: 2px 2px #000;
+    padding-bottom: 5%;
 }
 
+form
+{
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+article
+{
+    padding: 20px;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+article p
+{
+    font-size: 1rem;
+    color: white;
+}
+
+ol {
+    list-style: none;
+}
